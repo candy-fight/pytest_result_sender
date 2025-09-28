@@ -1,0 +1,26 @@
+[project]
+name = "pytest_result_sender"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "zhangmingjiang", email = "316686808@qq.com"},
+]
+dependencies = ["pytest>=8.3.5"]
+requires-python = ">=3.8"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
+
+[dependency-groups]
+dev = [
+    "black>=24.8.0",
+    "isort>=5.13.2",
+    "flake8>=5.0.4",
+]
