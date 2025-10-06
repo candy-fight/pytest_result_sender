@@ -5,10 +5,13 @@ description = "Default template for PDM package"
 authors = [
     {name = "zhangmingjiang", email = "316686808@qq.com"},
 ]
-dependencies = ["pytest>=8.3.5"]
+dependencies = ["pytest>=8.3.5", "requests>=2.32.4"]
 requires-python = ">=3.8"
 readme = "README.md"
 license = {text = "MIT"}
+
+[project.entry-points."pytest11"]
+pytest_result_sender = "pytest_result_sender.plugin"
 
 [build-system]
 requires = ["pdm-backend"]
@@ -24,3 +27,55 @@ dev = [
     "isort>=5.13.2",
     "flake8>=5.0.4",
 ]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.git
+  | \.venv
+  | venv
+  | __pypackages__
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+src_paths = ["src", "tests"]
+extend_skip = ["__pypackages__", ".venv", "venv", "build", "dist"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = [
+    "E203",    # whitespace before ':'
+    "W503",    # line break before binary operator
+]
+exclude = [
+    ".git",
+    "__pypackages__",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+]
+max-complexity = 10
+
+[tool.pdm.scripts]
+# Check commands
+black-check = "black src/ tests/ --check --diff --color"
+isort-check = "isort src/ tests/ --check --diff --color"
+flake8 = "flake8 src/ tests/ --color"
+format-check = { composite = ["black-check", "isort-check"] }
+lint = "flake8"
+check = { composite = ["format-check", "lint"] }
+# Apply formatting
+isort = "isort src/ tests/"
+black = "black src/ tests/"
+format = { composite = ["isort", "black"] }
